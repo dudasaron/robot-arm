@@ -20,13 +20,27 @@
         <div class="col-12 col-md-6">
           <h2>Preview</h2>
           <div id="preview-canvas"></div>
+          <table class="table table-default table-striped">
+            <tr>
+              <td>Base</td><td>{{arm.state.baseRotationDegree}}°</td>
+            </tr>
+            <tr>
+              <td>Shoulder</td><td>{{arm.state.shoulderRotationDegree}}°</td>
+            </tr>
+            <tr>
+              <td>Ankle</td><td>{{arm.state.ankleRotationDegree}}°</td>
+            </tr>
+            <tr>
+              <td>Wrist</td><td>{{arm.state.wristRotationDegree}}°</td>
+            </tr>            
+          </table>
         </div>
         <div class="col-12 col-md-6">
           <h2>Control Panel</h2>
           <p>Select a target position for the robot arm:</p>
-          <canvas id="target-position-selector" (click)="coordinateSelected($event)"></canvas>
+          <canvas id="target-position-selector"></canvas>
         </div>
-    </section>
+      </section>
   </main>
 
   <footer class="footer">

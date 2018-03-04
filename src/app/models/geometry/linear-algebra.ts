@@ -10,19 +10,28 @@ export class LinearAlgebra {
         return result;
     }
 
-    public static cross(vactor_1: number[], vector_2: number[]): number[] {
-        if (vactor_1.length !== 3 || vector_2.length !== 3) {
+    public static cross(vector_1: number[], vector_2: number[]): number[] {
+        if (vector_1.length !== 3 || vector_2.length !== 3) {
             throw new RangeError('Array lengths must be 3!');
         }
         return [
-             (vactor_1[1] * vector_2[2] - vactor_1[2]  * vector_2[1]),
-            -(vactor_1[0] * vector_2[2] - vactor_1[2]  * vector_2[0]),
-             (vactor_1[0] * vector_2[1] - vactor_1[1]  * vector_2[0])
+             (vector_1[1] * vector_2[2] - vector_1[2]  * vector_2[1]),
+            -(vector_1[0] * vector_2[2] - vector_1[2]  * vector_2[0]),
+             (vector_1[0] * vector_2[1] - vector_1[1]  * vector_2[0])
         ];
     }
 
     public static abs(vector: number[]): number {
         const summer = (accumulator, val) => accumulator + val * val;
         return Math.abs(Math.sqrt(vector.reduce(summer)));
+    }
+
+    public static scale(vector: number[], n: number): number[] {
+        return vector.map(x => x * n);
+    }
+
+    public static normalize(vector: number[]): number[] {
+        return this.scale(vector, 1. / this.abs(vector));
+
     }
 }

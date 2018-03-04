@@ -1,7 +1,7 @@
 import { LinearAlgebra } from './linear-algebra';
 export class Vertex3D {
 
-    private coords: number[];
+    private coords: number[] = [0, 0, 0];
 
     public get x(): number { return this.coords[0]; }
 
@@ -11,9 +11,9 @@ export class Vertex3D {
 
     public set x(x: number) { this.coords[0] = x; }
 
-    public set y(y: number) { this.coords[0] = y; }
+    public set y(y: number) { this.coords[1] = y; }
 
-    public set z(z: number) { this.coords[0] = z; }
+    public set z(z: number) { this.coords[2] = z; }
 
     public constructor(coords?: any) {
         this.x = coords && coords.x && Number(coords.x) || 0;
