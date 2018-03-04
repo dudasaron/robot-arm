@@ -25,8 +25,8 @@ export class AppComponent implements OnInit {
     const container = document.getElementById('preview-canvas');
 
     // Set the scene size.
-    const WIDTH = container.clientWidth;
-    const HEIGHT = container.clientHeight;
+    const WIDTH = 400;
+    const HEIGHT = 400;
 
     // Set some camera attributes.
     const VIEW_ANGLE = 45;
@@ -45,6 +45,11 @@ export class AppComponent implements OnInit {
         NEAR,
         FAR
       );
+    camera.position.x = 0;
+    camera.position.y = 0;
+    camera.position.z = 10;
+
+    camera.lookAt(0, 0, 0);
 
     const scene = new THREE.Scene();
 
@@ -53,23 +58,25 @@ export class AppComponent implements OnInit {
 
     // create the sphere's material
     const texture = new THREE.Texture(this.canvas);
-    const material = new THREE.MeshBasicMaterial({ map: texture });
+    const material = new THREE.MeshBasicMaterial({ map: texture, side: THREE.DoubleSide });
 
     // Create a new mesh with
     // sphere geometry - we will cover
     // the sphereMaterial next!
     const sphere = new THREE.Mesh(
-
-      new THREE.BoxGeometry(
-        1,
-        1,
-        1),
+      new THREE.PlaneGeometry(
+        5,
+        5,
+        10,
+        10),
 
       material);
 
     // Move the Sphere back in Z so we
     // can see it.
-    sphere.position.z = -5;
+    sphere.position.x = 0;
+    sphere.position.y = 0;
+    sphere.position.z = 0;
 
     // Finally, add the sphere to the scene.
     scene.add(sphere);
@@ -91,19 +98,24 @@ export class AppComponent implements OnInit {
 
     renderer.render(scene, camera);
 
+    let i = 0;
+    camera.up.set(0, 0, 1);
+
     const update = () => {
       // Draw!
       renderer.render(scene, camera);
 
-      sphere.rotateX(0.01);
-      sphere.rotateY(0.01);
+      camera.position.set(Math.sin(i) * 6, Math.cos(i) * 6, 7);
+      camera.lookAt(0, 0, 0);
 
       texture.needsUpdate = this.canvasUpdated;
       this.canvasUpdated = false;
 
       // Schedule the next frame.
       requestAnimationFrame(update);
-    }
+
+      i += 0.01;
+    };
 
     // Schedule the first frame.
     requestAnimationFrame(update);
