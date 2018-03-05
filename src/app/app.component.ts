@@ -27,7 +27,7 @@ export class AppComponent implements OnInit {
 
   private canvas: HTMLCanvasElement;
 
-  private arm: RobotArm;
+  public arm: RobotArm;
 
   private renderPipeline: (() => void)[] = [];
 
@@ -117,6 +117,9 @@ export class AppComponent implements OnInit {
       this.camera.lookAt(2.5, 0, 0);
 
       camera_rotation += 0.005;
+      if (camera_rotation >= 2 * Math.PI) {
+        camera_rotation -= 2 * Math.PI;
+      }
     });
   }
 
