@@ -4,6 +4,7 @@ import * as $ from 'jquery';
 import { element } from 'protractor';
 import { RobotArm } from './models/robot-arm';
 import { RobotArmConfiguration } from './models/robot-arm-configuration';
+import { LinearAlgebra } from './models/geometry/linear-algebra';
 
 @Component({
   selector: 'app-root',
@@ -34,14 +35,19 @@ export class AppComponent implements OnInit {
   private arm_parts: any[] = [];
   private redraw_arm = false;
 
+  private prevPos = [1, 0];
+  private currentPos = [1, 0];
+  private targetPos = [1, 0];
+
   constructor() {
     this.arm = new RobotArm(new RobotArmConfiguration(
       {x: 0, y: 0, z: 0.3},
       {x: 0, y: -0.3, z: 0.2},
-      {x: 0, y: 0, z: 1.5},
-      {x: 0, y: 0, z: 1.5},
+      {x: 0, y: 0, z: 2.5},
+      {x: 0, y: 0, z: 2.5},
       {x: 0, y: 0, z: 0.7}
     ));
+    this.arm.state = this.arm.touchPoint(1, 0, 0);
   }
 
   public ngOnInit(): void {
@@ -121,13 +127,14 @@ export class AppComponent implements OnInit {
 
     // Create the canvas for the surface
     this.initCanvas((event: any) => {
-      const x = event.layerX - event.target.offsetLeft;
-      const y = event.layerY - event.target.offsetTop;
-      canvas_updated = true;
-      this.renderCanvas({x: x, y: y});
+      if (LinearAlgebra.equals(this.prevPos, this.targetPos)) {
+        const x = event.layerX - event.target.offsetLeft;
+        const y = event.layerY - event.target.offsetTop;
+        canvas_updated = true;
+        this.renderCanvas({x: x, y: y});
 
-      this.arm.state = this.arm.touchPoint(5 * x / 400., 5 * y / 400. - 2.5);
-      this.redraw_arm = true;
+        this.targetPos = [5 * x / 400, 5 * y / 400 - 2.5];
+      }
     });
 
     // Create the surface planes material from the canvas
@@ -154,11 +161,28 @@ export class AppComponent implements OnInit {
     });
 
     this.arm_parts = this.drawRobotArm();
-    this.redraw_arm = true;
+    for (let i = 0; i < this.arm_parts.length; ++i) {
+      this.scene.add(this.arm_parts[i]);
+    }
 
     this.renderPipeline.push(() => {
-      if (this.redraw_arm) {
-        this.redraw_arm = false;
+      if (!LinearAlgebra.equals(this.prevPos, this.targetPos)) {
+        const _d = LinearAlgebra.sub(this.targetPos, this.prevPos);
+        const _dlen = LinearAlgebra.abs(_d);
+        const d = LinearAlgebra.scale(_d, 0.03 / _dlen);
+
+        this.currentPos = LinearAlgebra.add(this.currentPos, d);
+
+
+        if (LinearAlgebra.abs(LinearAlgebra.sub(this.currentPos, this.targetPos)) < 1.1 * LinearAlgebra.abs(d)) {
+          this.currentPos = LinearAlgebra.duplicate(this.targetPos);
+          this.prevPos = LinearAlgebra.duplicate(this.targetPos);
+        }
+        const l = LinearAlgebra.abs(LinearAlgebra.sub(this.currentPos, this.prevPos));
+
+        const z = (- ((l - _dlen / 2) ** 2) + (_dlen / 2) ** 2) * (1.2 / (_dlen / 2) ** 2);
+
+        this.arm.state = this.arm.touchPoint(this.currentPos[0], this.currentPos[1], z );
         for (let i = 0; i < this.arm_parts.length; ++i) {
           this.scene.remove(this.arm_parts[i]);
         }
@@ -178,8 +202,6 @@ export class AppComponent implements OnInit {
     const last_pos = new THREE.Vector3();
     const next_pos = new THREE.Vector3();
     last_pos.copy(origin);
-
-    console.log(this.arm.state);
 
     const axel = new THREE.Vector3(1, 0, 0);
     const up = new THREE.Vector3(0, 0, 1);

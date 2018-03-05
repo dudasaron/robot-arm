@@ -71,7 +71,7 @@ export class RobotArm {
         const _foreArmLength = this.config.wristOffset.length();
         const _x = (_upperArmLength * _upperArmLength - _foreArmLength * _foreArmLength) / (2 * _dr) + (_dr / 2);
         const _beta_2 = Math.acos(_x / _upperArmLength);
-        console.log(180 * _beta_2 / Math.PI);
+
         const beta = _beta_1 + _beta_2;
         const _delta_2 = Math.acos((_dr - _x) / _foreArmLength);
         const delta = _delta_1 + _delta_2;
