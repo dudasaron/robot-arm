@@ -16,7 +16,7 @@ export class RobotArm {
         this.state = new RobotArmState(
             0,
             state && state.shoulderRotation || 0,
-            state && state.ankleRotation || 0,
+            state && state.elbowRotation || 0,
             state && state.wristRotation || 0,
             state && state.actuatorState || 0
         );
@@ -66,8 +66,8 @@ export class RobotArm {
         const _beta_1 = _dist > 0 ? _angle_1 : _angle_2;
         const _delta_1 = _dist > 0 ? _angle_2 : _angle_1;
 
-        // The second parts of the shoulder and wrist angles, and the ankle rotation angle
-        const _upperArmLength = this.config.ankleOffset.length();
+        // The second parts of the shoulder and wrist angles, and the elbow rotation angle
+        const _upperArmLength = this.config.elbowOffset.length();
         const _foreArmLength = this.config.wristOffset.length();
         const _x = (_upperArmLength * _upperArmLength - _foreArmLength * _foreArmLength) / (2 * _dr) + (_dr / 2);
         const _beta_2 = Math.acos(_x / _upperArmLength);
@@ -80,10 +80,10 @@ export class RobotArm {
         // TODO: sanity checks
 
         return new RobotArmState(
-            alpha,
-            Math.PI - beta,
-            Math.PI - gamma,
-            Math.PI - delta,
+            Math.round(alpha * 180.0 / Math.PI) / (180.0 / Math.PI),
+            Math.round((Math.PI - beta) * 180.0 / Math.PI) / (180.0 / Math.PI),
+            Math.round((Math.PI - gamma) * 180.0 / Math.PI) / (180.0 / Math.PI),
+            Math.round((Math.PI - delta) * 180.0 / Math.PI) / (180.0 / Math.PI),
             this.state.actuatorState
         );
     }

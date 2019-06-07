@@ -1,0 +1,115 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>Robot Arm Controller</title>
+    <link href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-ggOyR0iXCbMQv3Xipma34MD+dH/1fQ784/j6cY/iJTQUOhcWr7x9JvoRxT2MZw1T" crossorigin="anonymous">
+    <link rel="stylesheet" href="style.css">
+</head>
+
+<body>
+    <header>
+        <nav class="navbar navbar-expand-md navbar-dark fixed-top bg-dark">
+            <a class="navbar-brand" href="#">Robotic Arm Controller</a>
+            <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarCollapse"
+                aria-controls="navbarCollapse" aria-expanded="false" aria-label="Toggle navigation">
+                <span class="navbar-toggler-icon"></span>
+            </button>
+            <div class="collapse navbar-collapse" id="navbarCollapse">
+                <ul class="navbar-nav mr-auto">
+                </ul>
+            </div>
+        </nav>
+    </header>
+
+    <main>
+        <section class="container">
+            <div class="row">
+                <div class="col-12">
+                    <h2>Connection</h2>
+                    <div class="form-group">
+                        <label for="url">WebSocket connection url:</label>
+                        <input type="text" name="url" id="url" value="ws://localhost:8675">
+                    </div>
+                    <button id="ws-connect-btn" class="btn btn-primary">Connect</button>
+                </div>
+            </div>
+        </section>
+        <hr>
+        <section>
+            <section class="container">
+                <div class="row">
+                    <div class="col-6">
+                        <h2>Controls</h2>
+                        <label>Autosend: <input type="checkbox" name="autosend" id="autosend" autocomplete="off"></label>
+                        <div class="form-group">
+                            <table class="table table-striped">
+                                <tr>
+                                    <th>Pivot</th>
+                                    <th>Value</th>
+                                </tr>
+                                <tr>
+                                    <td>Base</td>
+                                    <td>
+                                        0°<input type="range" min="0" max="180" id="base">180°
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <td>Shoulder</td>
+                                    <td>
+                                        0°<input type="range" min="0" max="180" id="shoulder">180°
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <td>Elbow</td>
+                                    <td>
+                                        0°<input type="range" min="0" max="180" id="elbow">180°
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <td>Wrist</td>
+                                    <td>
+                                        0°<input type="range" min="0" max="180" id="wrist">180°
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <td>Actuator</td>
+                                    <td>
+                                        <input type="checkbox" id="actuator">
+                                    </td>
+                                </tr>
+                            </table>
+                        </div>
+                        <button id="send-controls-btn" class="btn btn-primary" disabled autocomplete="off">Send</button>
+                    </div>
+                    <div class="col-6">
+                        <h2>Preview</h2>
+                        TODO <br>
+                        Base: <span id="base_prev"></span>°
+                        Shoulder: <span id="shoulder_prev"></span>°
+                        Elbow: <span id="elbow_prev"></span>°
+                        Wrist: <span id="wrist_prev"></span>°
+                        Actuator: <span id="actuator_prev"></span>
+                        <div id="render-canvas"></div>
+                        <canvas id="platform-canvas" width="400" height="400"></canvas>
+                    </div>
+                </div>
+            </section>
+        </section>
+    </main>
+
+    <footer class="footer">
+        <div class="container">
+            <span class="text-muted">Robotic Arm Controller by dudasaron</span>
+        </div>
+    </footer>
+
+    <script src="https://code.jquery.com/jquery-git.min.js"></script>
+    <script src="main.js" type="module"></script>
+
+</body>
+
+</html>

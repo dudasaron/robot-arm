@@ -5,6 +5,7 @@ import { element } from 'protractor';
 import { RobotArm } from './models/robot-arm';
 import { RobotArmConfiguration } from './models/robot-arm-configuration';
 import { LinearAlgebra } from './models/geometry/linear-algebra';
+import { ArmConfig } from './models/arm-config';
 
 @Component({
   selector: 'app-root',
@@ -39,13 +40,15 @@ export class AppComponent implements OnInit {
   private currentPos = [1, 0];
   private targetPos = [1, 0];
 
+  public control = new ArmConfig();
+
   constructor() {
     this.arm = new RobotArm(new RobotArmConfiguration(
-      {x: 0, y: 0, z: 0.3},
-      {x: 0, y: -0.3, z: 0.2},
-      {x: 0, y: 0, z: 2.5},
-      {x: 0, y: 0, z: 2.5},
-      {x: 0, y: 0, z: 0.7}
+      {x: 0, y: 0, z: 0.9},
+      {x: 0, y: -0.207, z: 0.117},
+      {x: 0, y: 0, z: 1.35},
+      {x: 0, y: 0, z: 0.90},
+      {x: 0, y: 0, z: 0.45}
     ));
     this.arm.state = this.arm.touchPoint(1, 0, 0);
   }
@@ -224,8 +227,8 @@ export class AppComponent implements OnInit {
     result.push(this.createJoint(next_pos));
     last_pos.copy(next_pos);
 
-    // Ankle
-    offset = new THREE.Vector3(this.arm.config.ankleOffset.x, this.arm.config.ankleOffset.y, this.arm.config.ankleOffset.z);
+    // Elbow
+    offset = new THREE.Vector3(this.arm.config.elbowOffset.x, this.arm.config.elbowOffset.y, this.arm.config.elbowOffset.z);
     offset.applyAxisAngle(axel, this.arm.state.shoulderRotation);
     next_pos.copy(last_pos).add(offset);
     result.push(new THREE.Line(this.createLineGeometry(last_pos, next_pos), line_material));
@@ -234,7 +237,7 @@ export class AppComponent implements OnInit {
 
     // Wrist
     offset = new THREE.Vector3(this.arm.config.wristOffset.x, this.arm.config.wristOffset.y, this.arm.config.wristOffset.z);
-    offset.applyAxisAngle(axel, this.arm.state.shoulderRotation + this.arm.state.ankleRotation);
+    offset.applyAxisAngle(axel, this.arm.state.shoulderRotation + this.arm.state.elbowRotation);
     next_pos.copy(last_pos).add(offset);
     result.push(new THREE.Line(this.createLineGeometry(last_pos, next_pos), line_material));
     result.push(this.createJoint(next_pos));
@@ -243,7 +246,7 @@ export class AppComponent implements OnInit {
 
     // Hand
     offset = new THREE.Vector3(this.arm.config.handOffset.x, this.arm.config.handOffset.y, this.arm.config.handOffset.z);
-    offset.applyAxisAngle(axel, this.arm.state.shoulderRotation + this.arm.state.ankleRotation + this.arm.state.wristRotation);
+    offset.applyAxisAngle(axel, this.arm.state.shoulderRotation + this.arm.state.elbowRotation + this.arm.state.wristRotation);
     next_pos.copy(last_pos).add(offset);
     result.push(new THREE.Line(this.createLineGeometry(last_pos, next_pos), line_material));
     result.push(this.createJoint(next_pos, 0.05));

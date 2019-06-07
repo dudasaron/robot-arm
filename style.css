@@ -1,0 +1,26 @@
+main {
+    margin-top: 80px;
+}
+
+.footer {
+    position: fixed;
+    bottom: 0;
+    width: 100%;
+    /* Set the fixed height of the footer here */
+    height: 40px;
+    line-height: 40px;
+    /* Vertically center the text there */
+    background-color: #f5f5f5;
+}
+
+#render-canvas {
+    width: 400px;
+    height: 400px;
+    background-color: #ababab;
+}
+
+#platform-canvas {
+    width: 400px;
+    height: 400px;
+    border: 1px solid #afafaf;
+}

@@ -22,16 +22,16 @@
           <div id="preview-canvas"></div>
           <table class="table table-default table-striped">
             <tr>
-              <td>Base</td><td>{{arm.state.baseRotationDegree}}°</td>
+              <td>Base</td><td>{{arm.state.baseRotationDegree | number : '0.0-2'}}°</td>
             </tr>
             <tr>
-              <td>Shoulder</td><td>{{arm.state.shoulderRotationDegree}}°</td>
+              <td>Shoulder</td><td>{{arm.state.shoulderRotationDegree | number : '0.0-2'}}°</td>
             </tr>
             <tr>
-              <td>Ankle</td><td>{{arm.state.ankleRotationDegree}}°</td>
+              <td>Elbow</td><td>{{arm.state.elbowRotationDegree | number : '0.0-2'}}°</td>
             </tr>
             <tr>
-              <td>Wrist</td><td>{{arm.state.wristRotationDegree}}°</td>
+              <td>Wrist</td><td>{{arm.state.wristRotationDegree | number : '0.0-2'}}°</td>
             </tr>            
           </table>
         </div>
@@ -40,6 +40,22 @@
           <p>Select a target position for the robot arm:</p>
           <canvas id="target-position-selector"></canvas>
         </div>
+      </section>
+      <section>
+        <table class="table table-default table-striped">
+          <tr>
+            <td>Base</td><td><input type="range" min="0" value="180" step="1" [(ngModel)]="control.baseRotationDegree" /></td>
+          </tr>
+          <tr>
+            <td>Shoulder</td><td><input type="range" min="0" value="180" step="1" [(ngModel)]="control.shoulderRotationDegree" /></td>
+          </tr>
+          <tr>
+            <td>Elbow</td><td><input type="range" min="0" value="180" step="1" [(ngModel)]="control.elbowRotationDegree" /></td>
+          </tr>
+          <tr>
+            <td>Wrist</td><td><input type="range" min="0" value="180" step="1" [(ngModel)]="control.wristRotationDegree" /></td>
+          </tr>            
+        </table>
       </section>
   </main>
 
