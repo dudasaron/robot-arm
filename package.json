@@ -26,6 +26,6 @@
   },
   "homepage": "https://github.com/dudasaron/robot-arm#readme",
   "devDependencies": {
-    "http-server": "^0.11.1"
+    "http-server": "^0.11.2"
   }
 }
